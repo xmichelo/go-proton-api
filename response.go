@@ -22,6 +22,7 @@ const (
 	SuccessCode                 Code = 1000
 	MultiCode                   Code = 1001
 	InvalidValue                Code = 2001
+	AlreadyExists               Code = 2500
 	AppVersionMissingCode       Code = 5001
 	AppVersionBadCode           Code = 5003
 	UsernameInvalid             Code = 6003 // Deprecated, but still used.
