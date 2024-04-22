@@ -24,11 +24,12 @@ type CreateFileRes struct {
 	RevisionID string // Encrypted Revision ID
 }
 
-type UpdateRevisionReq struct {
-	BlockList         []BlockToken
-	State             RevisionState
-	ManifestSignature string
-	SignatureAddress  string
+// CommitRevisionReq holds the request body for a revision commit request.
+type CommitRevisionReq struct {
+	ManifestSignature string  // Signature of the manifest.
+	SignatureAddress  string  // Address used to sign the manifest.
+	BlockNumber       *int    // The index of the last block to keep when creating a revision while preserving partial content from a previous revision.
+	XAttr             *string // File extended attributes encrypted with the link key.
 }
 
 type BlockToken struct {

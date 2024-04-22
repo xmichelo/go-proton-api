@@ -48,7 +48,7 @@ func (c *Client) GetRevision(ctx context.Context, shareID, linkID, revisionID st
 	return res.Revision, nil
 }
 
-func (c *Client) UpdateRevision(ctx context.Context, shareID, linkID, revisionID string, req UpdateRevisionReq) error {
+func (c *Client) CommitRevision(ctx context.Context, shareID, linkID, revisionID string, req CommitRevisionReq) error {
 	return c.do(ctx, func(r *resty.Request) (*resty.Response, error) {
 		return r.SetBody(req).Put("/drive/shares/" + shareID + "/files/" + linkID + "/revisions/" + revisionID)
 	})
