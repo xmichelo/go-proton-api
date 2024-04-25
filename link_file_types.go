@@ -44,3 +44,59 @@ type ConflictErrorResponse struct {
 	ConflictDraftRevisionID string
 	ConflictDraftClientUID  string
 }
+
+// XAttr holds the extended attributes for a file revision.
+type XAttr struct {
+	Common    *XAttrCommon    // Common attributes.
+	Location  *XAttrLocation  // Location attributes.
+	Camera    *XAttrCamera    // Camera attributes.
+	Media     *XAttrMedia     // Media attributes.
+	IOSPhotos *XAttrIOSPhotos `json:"iOS.photos"` // iOS photos attributes.
+}
+
+// XAttrCommon contains the common attributes for file revisions.
+type XAttrCommon struct {
+	ModificationTime string       // UTC time in ISO 8601 format.
+	Size             *int64       // Size in bytes of the unencrypted content.
+	BlockSizes       []int64      // array containing the size of each unencrypted block.
+	Digest           *XAttrDigest // The digests.
+}
+
+// XAttrDigest contain the digests for a file revision.
+type XAttrDigest struct {
+	SHA1 string // SHA1 hash, in lower-case hex format.
+}
+
+// XAttrLocation contains the location attributes for a file revision.
+type XAttrLocation struct {
+	Latitude  float64
+	Longitude float64
+}
+
+// XAttrCamera contains the camera-related attributes for a file revision.
+type XAttrCamera struct {
+	CaptureTime        *string                  // UTC time in ISO 8601 format.
+	Device             *string                  // The name of the camera device.
+	Orientation        *int                     // EXIF orientation index in the range [1-8].
+	SubjectCoordinates *XAttrSubjectCoordinates // The subject coordinates.
+}
+
+// XAttrSubjectCoordinates holds a photo's EXIF subject coordinates.
+type XAttrSubjectCoordinates struct {
+	Top    int // Top coordinate.
+	Left   int // Left coordinate.
+	Bottom int // Bottom coordinate.
+	Right  int // Right coordinate.
+}
+
+// XAttrMedia contains the media-related attributes.
+type XAttrMedia struct {
+	Width    *int // Photo or video width.
+	Height   *int // Photo or video height.
+	Duration *int // Media duration.
+}
+
+type XAttrIOSPhotos struct {
+	ICloudID         string // iCloud library ID.
+	ModificationTime string // UTC time in ISO 8601 format.
+}
