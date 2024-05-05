@@ -39,6 +39,22 @@ type Share struct {
 	PassphraseSignature string // The signature of the passphrase
 }
 
+// CreateShareReq is the request body for the share POST request used to create a share
+type CreateShareReq struct {
+	AddressID                string // The encrypted addressID.
+	RootLinkID               string // The linkID for the share root node.
+	ShareKey                 string // The armored PGP private key of the share.
+	SharePassphrase          string // The armored PGP message containing the share key passphrase, encrypted with the address key.
+	SharePassphraseSignature string // The armored PGP signature of the share passphrase.
+	PassphraseKeyPacket      string // The key packet for the root link passphrase, in base64 encoding.
+	NameKeyPacket            string // The key packet for the root link name, in base64 encoding.
+}
+
+// CreateShareRes is the response body for a share creation request
+type CreateShareRes struct {
+	ID string // The shareID.
+}
+
 func (s Share) GetKeyRing(addrKR *crypto.KeyRing) (*crypto.KeyRing, error) {
 	enc, err := crypto.NewPGPMessageFromArmored(s.Passphrase)
 	if err != nil {

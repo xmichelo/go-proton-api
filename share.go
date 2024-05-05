@@ -46,3 +46,30 @@ func (c *Client) GetMainShare(ctx context.Context) (Share, error) {
 
 	return c.GetShare(ctx, volume.Share.ShareID)
 }
+
+// CreateShare create a new share and return the new shareID.
+func (c *Client) CreateShare(ctx context.Context, volumeID string, req CreateShareReq) (CreateShareRes, error) {
+	var res struct {
+		Share CreateShareRes
+	}
+
+	if err := c.do(ctx, func(r *resty.Request) (*resty.Response, error) {
+		return r.SetResult(&res).SetBody(req).Post("/drive/volumes/" + volumeID + "/shares")
+	}); err != nil {
+		return CreateShareRes{}, err
+	}
+
+	return res.Share, nil
+}
+
+// DeleteShare deletes a share. If force is true, any attached member or shareURLs is deleted. If force is not set to true, and the
+// share has any member of shareURL attached, an error 422 with body code 2005 will be returned
+func (c *Client) DeleteShare(ctx context.Context, shareID string, force bool) error {
+	return c.do(ctx, func(r *resty.Request) (*resty.Response, error) {
+		if force {
+			r.SetQueryParam("force", "1")
+		}
+
+		return r.Delete("/drive/shares/" + shareID)
+	})
+}

@@ -91,9 +91,9 @@ type XAttrSubjectCoordinates struct {
 
 // XAttrMedia contains the media-related attributes.
 type XAttrMedia struct {
-	Width    *int // Photo or video width.
-	Height   *int // Photo or video height.
-	Duration *int // Media duration.
+	Width    *int     // Photo or video width.
+	Height   *int     // Photo or video height.
+	Duration *float64 // Media duration.
 }
 
 type XAttrIOSPhotos struct {
