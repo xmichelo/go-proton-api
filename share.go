@@ -67,7 +67,7 @@ func (c *Client) CreateShare(ctx context.Context, volumeID string, req CreateSha
 func (c *Client) DeleteShare(ctx context.Context, shareID string, force bool) error {
 	return c.do(ctx, func(r *resty.Request) (*resty.Response, error) {
 		if force {
-			r.SetQueryParam("force", "1")
+			r.SetQueryParam("Force", "1")
 		}
 
 		return r.Delete("/drive/shares/" + shareID)
