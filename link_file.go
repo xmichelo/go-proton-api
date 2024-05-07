@@ -65,3 +65,13 @@ func (c *Client) DeleteRevision(ctx context.Context, shareID, linkID, revisionID
 		return r.Delete("/drive/shares/" + shareID + "/files/" + linkID + "/revisions/" + revisionID)
 	})
 }
+
+func (c *Client) GetVerificationData(ctx context.Context, shareID, linkID, revisionID string) (VerificationData, error) {
+	var res VerificationData
+	if err := c.do(ctx, func(r *resty.Request) (*resty.Response, error) {
+		return r.SetResult(&res).Get("/drive/shares/" + shareID + "/links/" + linkID + "/revisions/" + revisionID + "/verification")
+	}); err != nil {
+		return VerificationData{}, err
+	}
+	return res, nil
+}

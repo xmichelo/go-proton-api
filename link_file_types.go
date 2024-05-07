@@ -96,7 +96,14 @@ type XAttrMedia struct {
 	Duration *float64 // Media duration.
 }
 
+// XAttrIOSPhotos contains the iOS photos related attributes.
 type XAttrIOSPhotos struct {
 	ICloudID         string // iCloud library ID.
 	ModificationTime string // UTC time in ISO 8601 format.
+}
+
+// VerificationData hold block verification data.
+type VerificationData struct {
+	VerificationCode string // Base64 encoded.
+	ContentKeyPacket string // Base64 encoded.
 }
