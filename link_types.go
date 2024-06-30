@@ -117,7 +117,7 @@ func (l Link) GetKeyRing(parentNodeKR, addrKR *crypto.KeyRing) (*crypto.KeyRing,
 	return crypto.NewKeyRing(unlockedKey)
 }
 
-func (l Link) GetHashKey(nodeKR *crypto.KeyRing) ([]byte, error) {
+func (l Link) GetHashKey(nodeKR, addrKR *crypto.KeyRing) ([]byte, error) {
 	if l.Type != LinkTypeFolder {
 		return nil, errors.New("link is not a folder")
 	}
@@ -129,7 +129,21 @@ func (l Link) GetHashKey(nodeKR *crypto.KeyRing) ([]byte, error) {
 
 	dec, err := nodeKR.Decrypt(enc, nodeKR, crypto.GetUnixTime())
 	if err != nil {
-		return nil, err
+		var sigError crypto.SignatureVerificationError
+		if errors.As(err, &sigError) {
+			// nodeHashKey is supposed to be signed with the node key ring, however some legacy applications
+			// signed it with the share address key.
+			if addrKR == nil {
+				return nil, err
+			}
+
+			dec, err = nodeKR.Decrypt(enc, addrKR, crypto.GetUnixTime())
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			return nil, err
+		}
 	}
 
 	return dec.GetBinary(), nil
